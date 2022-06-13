@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm</title>
+<style>
+body{
+  font-family: Calibri, Helvetica, sans-serif;
+}
+.container {
+    padding: 50px;
+    background-color: grey;
+    width:300px;
+    margin:80px;
+}
+
+input[type=text], input[type=email], input[type=number]{
+  width: 300px;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+select{
+  width: 130px;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+
+ }
+input[type=text]:focus, input[type=email], input[type=number], select:focus {
+  outline: none;
+}
+ div {
+            padding: 10px 0;
+         }
+.registerbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 125px;
+  opacity: 0.9;
+}
+.registerbtn:hover {
+  opacity: 1;
+}
+
+</style>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <form method="post" action="{% url 'chocolate_app:confirm' %}">
+        {% csrf_token %}
+
+        <center>
+        <div class="container">
+            <h1>Confirm Order</h1>
+            <input type="text" name="customer_name" placeholder= "Customer Name" size="15" required /><br>
+            <input type="text" name="phone_no" placeholder="Phone Number" size="15" required /><br>
+            <input type="email" name="email" placeholder="Email" size="15"required /><br>
+            <input type="text" name="address" placeholder="Address" size="15"required /><br>
+            <select id="inputDistrict" name="district" required>
+                <option value="">Select District</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kochi">Kochi</option>
+                <option value="Kasaragode">Kasaragode</option>
+            </select>
+            <select id="inputCity" name="city" required>
+                <option value="">Select City</option>
+            </select>
+            <select id="chocolatename" name="chocolate" required>
+                <option value="">Select Chocolate</option>
+                <option value="Snickers">Snickers</option>
+                <option value="Toblerone">Toblerone</option>
+                <option value="Kitkat">Kitkat</option>
+            </select>
+            <select id="price" name="price" required>
+                <option value="">Price</option>
+            </select>
+            <input type="number" name="quantity" placeholder="Quantity" size="15"required /><br>
+            <input type="reset" class="registerbtn" value="Reset">
+            <input type="submit" class="registerbtn" value="Confirm"><br>
+            <a href="{% url 'chocolate_app:logout' %}">Logout</a>
+        </div>
+        </center>
+    </form>
+    <script>
+        var Kannur = ["Payyanur","Puthyatheru","Kambil",];
+        var  Kochi= ["Ottapalam", "Fort Kochi", "Marian Drive"];
+        var  Kasaragode= ["Cheruvathur","Ranipuram","Neleswaram"];
+        $("#inputDistrict").change(function () {
+               var StateSelected = $(this).val();
+               var optionsList;
+               var htmlString = "";
+
+              switch (StateSelected) {
+              case "Kannur":
+                optionsList = Kannur;
+                break;
+              case "Kochi":
+                optionsList = Kochi;
+                break;
+              case "Kasaragode":
+                optionsList = Kasaragode;
+                break;
+              }
+
+              for (var i = 0; i < optionsList.length; i++) {
+                htmlString =
+                htmlString +
+                "<option value='" +
+                optionsList[i] +
+                "'>" +
+                optionsList[i] +
+                "</option>";
+              }
+              $("#inputCity").html(htmlString);
+        });
+    </script>
+    <script>
+        var Snickers = ["40","50","60",];
+        var  Toblerone= ["70", "80", "90"];
+        var  Kitkat= ["100","110","120"];
+        $("#chocolatename").change(function () {
+               var StateSelected = $(this).val();
+               var optionsList;
+               var htmlString = "";
+
+              switch (StateSelected) {
+              case "Snickers":
+                optionsList = Snickers;
+                break;
+              case "Toblerone":
+                optionsList = Toblerone;
+                break;
+              case "Kitkat":
+                optionsList = Kitkat;
+                break;
+              }
+
+              for (var i = 0; i < optionsList.length; i++) {
+                htmlString =
+                htmlString +
+                "<option value='" +
+                optionsList[i] +
+                "'>" +
+                optionsList[i] +
+                "</option>";
+              }
+              $("#price").html(htmlString);
+        });
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+                {% if messages %}
+                swal({
+                    title:"Success",
+                    text:"Order Placed",
+                    icon:"success",
+                }).then(function(){
+                    window.location="{% url 'chocolate_app:shop' %}";
+                {% endif %}
+               });
+         });
+    </script>
+</body>
+</html>
